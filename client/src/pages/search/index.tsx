@@ -5,7 +5,7 @@ import Taro from '@tarojs/taro'
 import { Search,NavBar} from '@antmjs/vantui';
 import { useEffect, useState } from 'react';
 
-export default function index() {
+const  index:React.FC = ()=> {
 
     const [nftlist, setnftlist] = useState([])
     useEffect(() => {
@@ -46,4 +46,4 @@ export default function index() {
     )
 }
 
-
+export default index

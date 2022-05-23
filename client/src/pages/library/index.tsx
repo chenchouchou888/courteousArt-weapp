@@ -1,55 +1,31 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import './index.less'
 import Taro from '@tarojs/taro'
-import { NavBar, Skeleton} from '@antmjs/vantui';
+import { Tab,Tabs, Skeleton} from '@antmjs/vantui';
+import Issuance from '../../components/issuance'
 
-export default class Index extends Component {
+const Index:React.FC =()=> {
 
-  
-  onClickLeft=()=> {
-    Taro.showToast({
-      title: '返回',
-      icon: 'none'
-    });
-    Taro.navigateBack()
-  } 
-  state = {
-    loading:true,
-    threads:[],
-  }
-  componentWillMount () { }
-
-  async componentDidMount () { 
-   
-    
-  }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
-
-  render () {
     return (
       <View>
-        
-      <View>
-  <NavBar
-    title="CourteousArt"
-    leftText="返回"
-    leftArrow={ true }
-    onClickLeft={ this.onClickLeft }
-  />
-  </View>
-  <Skeleton
-    title={ true }
-    row={8}
-  />
-
-
+       <Tabs
+    animated={true}
+    sticky={true}
+    color={'#9ecefc'}
+    lineWidth={'3rem'}
+    onChange={()=>{}}
+    className='libraryWrapper'
+  >
+    <Tab title="交流">
+      内容 1
+    </Tab>
+    <Tab title="发布">
+      <Issuance/>
+    </Tab>
+  </Tabs>
     </View>
     )
-  }
+  
 }
+export default Index
