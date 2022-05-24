@@ -4,6 +4,7 @@ import './index.less'
 import Taro from '@tarojs/taro'
 import { Tab,Tabs, Skeleton} from '@antmjs/vantui';
 import Issuance from '../../components/issuance'
+import Comments from '../../components/comments'
 
 const Index:React.FC =()=> {
 
@@ -18,7 +19,7 @@ const Index:React.FC =()=> {
     className='libraryWrapper'
   >
     <Tab title="交流">
-      内容 1
+      <Comments/>
     </Tab>
     <Tab title="发布">
       <Issuance/>

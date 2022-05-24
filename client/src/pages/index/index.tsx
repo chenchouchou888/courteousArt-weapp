@@ -55,7 +55,7 @@ export default function index() {
       </View>
       <View className='cardlistwrapper' style={{ display: nftlist.length ? 'flex' : 'none' }}>
 
-        {nftlist.map((item) => {
+        {nftlist.map((item:any) => {
           return <Nftcard key={item.url} like={item.like} url={item.url} author={item.author} name={item.name} price={item.price} description={item.description}></Nftcard>
         })}
       </View>
