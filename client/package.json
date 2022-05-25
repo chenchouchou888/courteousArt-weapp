@@ -40,6 +40,7 @@
     "@tarojs/taro": "3.4.8",
     "babel-plugin-transform-remove-strict-mode": "^0.0.2",
     "nanoid": "^3.3.4",
+    "pubsub-js": "^1.9.4",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-redux": "^8.0.1",

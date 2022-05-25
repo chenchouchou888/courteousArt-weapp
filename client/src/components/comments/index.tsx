@@ -1,9 +1,11 @@
-import { Cell, Image, Loading, Collapse, CollapseItem } from "@antmjs/vantui"
+import { Cell, Image, Loading, CellGroup, Popup, Button, Field } from "@antmjs/vantui"
 import { View } from "@tarojs/components"
 import Taro, { usePullDownRefresh } from "@tarojs/taro"
 import React, { useEffect, useState } from "react"
-import { getCommentList } from "../../api/index"
+import { addComment, getCommentList } from "../../api/index"
 import './index.less'
+import  pubsub from 'pubsub-js'
+
 //hook中ref的使用
 const Index: React.FC = () => {
     const [loading, setLoading] = useState(false)
@@ -23,8 +25,7 @@ const Index: React.FC = () => {
     }, [])
 
     return (
-        <View className="commentWrapper">
-
+        <View className="commentWrapper" >
             <Loading size="24px"
                 type="spinner"
                 className="loader"
@@ -34,15 +35,30 @@ const Index: React.FC = () => {
 
 
             {commentList.map((item: any) => <Comment key={item._id} params={item} />)}
-            <View style={{ height: '6rem' }} />
+            <View style={{ height: '13vh' }} />
         </View>
     )
 
 }
 
 const Comment: React.FC<any> = (props: any) => {
-    const { author, description, name, rate, url } = props.params
-    const [activeNames, setActiveNames] = useState("1")
+    const { author, description, name, rate, url ,_id} = props.params
+    useEffect(()=>{
+        pubsub.subscribe('addComment',(msg,params)=>{
+            const {id,info} = params
+    
+            if(id==_id)
+            {
+                const commentInfo = {
+                    info,
+                    id
+                }
+                console.log('in')
+                addComment(commentInfo)//云处理
+            }
+    
+        })
+    },[])
     return (
         <View>
             <View className="commentdetailWrapper">
@@ -57,9 +73,21 @@ const Comment: React.FC<any> = (props: any) => {
                 </View>
 
             </View>
-            <View className="comment">
-                <Cell title="简介" value={description}></Cell>
-               
+            <View className="comment" >
+                <Cell title="简介&评论" value={description}></Cell>
+
+                <CellGroup inset>
+                    <Cell title="王金阳" value="2022.5.25" label="这张图一定能超过五位数" />
+                    <Cell
+                        title="我要评论"
+                        isLink={true}
+                        onClick={() => {
+                                pubsub.publish('changePop',_id)
+                        }}
+                    />
+                </CellGroup>
+
+
             </View>
         </View>
 

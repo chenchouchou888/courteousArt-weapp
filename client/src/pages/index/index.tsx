@@ -64,9 +64,9 @@ export default function index() {
         row={8}
         style={{ display: nftlist.length ? 'none' : 'block' }}
       />
-      <View>
+    
         <CardPop />
-      </View>
+     
       <View style={{ height: '13vh' }} />
 
 

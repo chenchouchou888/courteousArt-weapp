@@ -2,7 +2,6 @@ import { Uploader,Button ,Form,FormItem,Icon,Rate,Field} from "@antmjs/vantui"
 import { Input, View } from "@tarojs/components"
 import Taro from "@tarojs/taro"
 import React, {useEffect, useRef, useState } from "react"
-import { nanoid } from "nanoid"
 import { addNftComment } from '../../api/index'
 //hook中ref的使用
 const Index:React.FC =()=> {
@@ -126,6 +125,8 @@ const Index:React.FC =()=> {
     type="primary"
     className="van-button-submit"
     onClick={handleClick}
+    
+    style={{width:'10rem',background:'red',marginTop:'2rem',marginLeft:'50%',transform:'translateX(-50%)'}}
   >
   提交
   </Button>
