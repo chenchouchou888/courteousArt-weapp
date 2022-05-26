@@ -1,10 +1,10 @@
-import { Cell, Image, Loading, CellGroup, Popup, Button, Field } from "@antmjs/vantui"
+import { Cell, Image, Loading, CellGroup, SwipeCell, Icon } from "@antmjs/vantui"
 import { View } from "@tarojs/components"
 import Taro, { usePullDownRefresh } from "@tarojs/taro"
-import React, { useEffect, useState } from "react"
-import { addComment, getCommentList } from "../../api/index"
+import React, { useEffect, useRef, useState } from "react"
+import { addComment, getCommentList, getCommentListbyId, removeUserComment } from "../../api/index"
 import './index.less'
-import  pubsub from 'pubsub-js'
+import pubsub from 'pubsub-js'
 
 //hook中ref的使用
 const Index: React.FC = () => {
@@ -25,7 +25,7 @@ const Index: React.FC = () => {
     }, [])
 
     return (
-        <View className="commentWrapper" >
+        <View className="commentWrapper">
             <Loading size="24px"
                 type="spinner"
                 className="loader"
@@ -42,23 +42,34 @@ const Index: React.FC = () => {
 }
 
 const Comment: React.FC<any> = (props: any) => {
-    const { author, description, name, rate, url ,_id} = props.params
-    useEffect(()=>{
-        pubsub.subscribe('addComment',(msg,params)=>{
-            const {id,info} = params
-    
-            if(id==_id)
-            {
+    const { author, description, name, rate, url, _id } = props.params
+    const [list, setList] = useState([])
+    async function getList() {
+        setList(await getCommentListbyId(_id))
+    }
+    async function removeComment(_id) {
+        await removeUserComment(_id)
+        getList()
+    }
+    useEffect(() => {
+        //首次刷新评论列表
+        getList()
+        //订阅发布评论事件
+        pubsub.subscribe('addComment', async (msg, params) => {
+            const { id, info } = params
+
+            if (id == _id) {
                 const commentInfo = {
                     info,
                     id
                 }
                 console.log('in')
-                addComment(commentInfo)//云处理
+                await addComment(commentInfo)//云处理
+                getList()
             }
-    
+
         })
-    },[])
+    }, [])
     return (
         <View>
             <View className="commentdetailWrapper">
@@ -77,12 +88,23 @@ const Comment: React.FC<any> = (props: any) => {
                 <Cell title="简介&评论" value={description}></Cell>
 
                 <CellGroup inset>
-                    <Cell title="王金阳" value="2022.5.25" label="这张图一定能超过五位数" />
+                    {list?.map((item: any) => {
+                        return (<Cell title="waiting" label={item.info} value={item.date}
+                            renderRightIcon={
+                                <View >
+                                    <Icon name='cross' className="iconleft" color="#8fc7fb" onClick={() => {
+                                        removeComment(item._id)
+                                    }}></Icon>
+                                </View>
+
+                            }></Cell>)
+                    }
+                    )}
                     <Cell
                         title="我要评论"
                         isLink={true}
                         onClick={() => {
-                                pubsub.publish('changePop',_id)
+                            pubsub.publish('changePop', _id)
                         }}
                     />
                 </CellGroup>

@@ -61,6 +61,7 @@ useEffect(()=>{
                                 <Button
                                     size="small"
                                     type="primary"
+                                    color="#8fc7fb"
                                     onClick={()=>{
                                       const params = {
                                         info:commentInfo,
@@ -68,6 +69,8 @@ useEffect(()=>{
                                       }
                                       //发布消息，让子组件处理
                                       pubsub.publish('addComment',params)
+                                      setShow(false)
+                                      setCommentInfo('')//评论清清干净
                                     }}
                                     >
                                     提交评论
